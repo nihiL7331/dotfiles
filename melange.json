@@ -1,28 +1,23 @@
 {
-  "name": "melange_dark",
-  "base": {
-    "background": "#292522",
-    "foreground": "#ECE1D7",
-    "cursor-color": "#ECE1D7",
-    "selection-background": "#403A36",
-    "selection-foreground": "#ECE1D7"
-  },
-  "palette": [
-    "#34302C", 
-    "#BD8183", 
-    "#78997A", 
-    "#E49B5D", 
-    "#7F91B2", 
-    "#B380B0", 
-    "#7B9695", 
-    "#C1A78E", 
-    "#867462", 
-    "#D47766", 
-    "#85B695", 
-    "#EBC06D", 
-    "#A3A9CE", 
-    "#CF9BC2", 
-    "#89B3B6", 
-    "#ECE1D7"
-  ]
+  "name": "melange",
+  "nvim": "savq/melange-nvim",
+  "ghostty": "https://raw.githubusercontent.com/savq/melange-nvim/refs/heads/master/term/ghostty/melange_dark",
+  "defaults": {
+    "a": {
+      "bg": "#292522", "float": "#34302C", "sel": "#403A36",
+      "ui": "#867462", "com": "#C1A78E", "fg": "#ECE1D7"
+    },
+    "b": {
+      "red": "#D47766", "yellow": "#EBC06D", "green": "#85B695",
+      "cyan": "#89B3B6", "blue": "#A3A9CE", "magenta": "#CF9BC2"
+    },
+    "c": {
+      "red": "#BD8183", "yellow": "#E49B5D", "green": "#78997A",
+      "cyan": "#7B9695", "blue": "#7F91B2", "magenta": "#B380B0"
+    },
+    "d": {
+      "red": "#7D2A2F", "yellow": "#8B7449", "green": "#233524",
+      "cyan": "#253333", "blue": "#273142", "magenta": "#422741"
+    }
+  }
 }

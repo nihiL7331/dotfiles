@@ -311,20 +311,19 @@ do
     },
   }
 
-  -- [[ Colorscheme ]]
-  -- You can easily change to a different colorscheme.
-  -- Change the name of the colorscheme plugin below, and then
-  -- change the command under that to load whatever the name of that colorscheme is.
+  -- -- You can easily change to a different colorscheme.
+  -- -- Change the name of the colorscheme plugin below, and then
+  -- -- change the command under that to load whatever the name of that colorscheme is.
+  -- --
+  -- -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
+  -- --- @param repo_user string
+  -- --- @param name string
+  -- local function set_colorscheme(repo_user, name)
+  --   vim.pack.add { gh(repo_user .. '/' .. name .. '-nvim') }
+  --   vim.cmd.colorscheme(name)
+  -- end
   --
-  -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
-  --- @param repo_user string
-  --- @param name string
-  local function set_colorscheme(repo_user, name)
-    vim.pack.add { gh(repo_user .. '/' .. name .. '.nvim') }
-    vim.cmd.colorscheme(name)
-  end
-
-  set_colorscheme('scottmckendry', 'cyberdream')
+  -- set_colorscheme('savq', 'melange')
 
   -- Highlight todo, notes, etc in comments
   vim.pack.add { gh 'folke/todo-comments.nvim' }
@@ -333,6 +332,11 @@ do
   -- [[ mini.nvim ]]
   --  A collection of various small independent plugins/modules
   vim.pack.add { gh 'nvim-mini/mini.nvim' }
+
+  -- [[ Colorscheme ]]
+
+  local active = require 'core.current_theme'
+  vim.cmd('colorscheme ' .. active)
 
   -- If a nerd font is available, load the icons module for pretty icons in various plugins.
   if vim.g.have_nerd_font then
