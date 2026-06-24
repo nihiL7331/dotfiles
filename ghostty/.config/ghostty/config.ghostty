@@ -1,0 +1,26 @@
+window-decoration=false
+background-opacity=1.0
+background-blur=false
+macos-hidden=always
+font-size = 12
+font-family = "BigBlueTermPlus Nerd Font"
+freetype-load-flags = monochrome
+font-thicken = false
+
+confirm-close-surface = false
+
+cursor-style-blink = true
+mouse-hide-while-typing = true
+
+macos-option-as-alt = true
+macos-titlebar-style = hidden
+window-padding-balance = true
+theme = current
+
+cursor-color=cell-foreground
+cursor-text=cell-background
+cursor-style = block
+mouse-hide-while-typing = true
+shell-integration-features = no-cursor
+
+title = " "
