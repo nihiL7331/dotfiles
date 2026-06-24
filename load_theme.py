@@ -3,6 +3,8 @@ import sys
 import os
 import shutil
 import subprocess
+import urllib.request
+import urllib.error
 
 if len(sys.argv) != 2:
     print("Usage: python3 load_theme.py <theme.json>")
@@ -15,21 +17,51 @@ with open(os.path.join(DOTFILES, sys.argv[1])) as f:
 
 theme_name = theme["name"]
 
-
-def rgb2argb_pfd(col_str):
-    return f"0xff{col_str.replace('#', ' ')}"
-
 # ghostty setup
 if shutil.which("ghostty"):
-    ghostty_data = []
+    ghostty_path = os.path.join(
+        DOTFILES, "ghostty", ".config", "ghostty", "themes", "current"
+    )
+    os.makedirs(os.path.dirname(ghostty_path), exist_ok=True)
 
-    for key, hex_val in theme['base'].items():
-        ghostty_data.append(f"{key} = {hex_val}")
+    ghostty_target = theme.get("ghostty")
 
-    for index, hex_val in enumerate(theme["palette"]):
-        ghostty_data.append(f"palette = {index}={hex_val}")
+    if ghostty_target and ghostty_target.startswith("http"):
+        try:
+            urllib.request.urlretrieve(ghostty_target, ghostty_path)
+        except urllib.error.URLError as e:
+            print(f"Download failed for Ghostty theme: {e}")
+            ghostty_target = None
 
-    ghostty_out = "\n".join(ghostty_data)
+    if not ghostty_target or not ghostty_target.startswith("http"):
+        defaults = theme.get("defaults", {})
+
+        ghostty_data = [
+            f"palette = 0={defaults['a']['bg']}",
+            f"palette = 1={defaults['c']['red']}",
+            f"palette = 2={defaults['c']['green']}",
+            f"palette = 3={defaults['c']['yellow']}",
+            f"palette = 4={defaults['c']['blue']}",
+            f"palette = 5={defaults['c']['magenta']}",
+            f"palette = 6={defaults['c']['cyan']}",
+            f"palette = 7={defaults['a']['ui']}",
+            f"palette = 8={defaults['a']['float']}",
+            f"palette = 9={defaults['b']['red']}",
+            f"palette = 10={defaults['b']['green']}",
+            f"palette = 11={defaults['b']['yellow']}",
+            f"palette = 12={defaults['b']['blue']}",
+            f"palette = 13={defaults['b']['magenta']}",
+            f"palette = 14={defaults['b']['cyan']}",
+            f"palette = 15={defaults['a']['fg']}",
+            f"background = {defaults['a']['bg']}",
+            f"foreground = {defaults['a']['fg']}",
+            f"cursor-color = {defaults['a']['com']}",
+            f"selection-background = {defaults['a']['sel']}",
+        ]
+
+        with open(ghostty_path, "w") as f:
+            f.write("\n".join(ghostty_data))
+
 # nvim setup
 if shutil.which("nvim"):
     state_path = os.path.join(
@@ -75,6 +107,7 @@ if shutil.which("nvim"):
             f"vim.g.colors_name = '{theme_name}'",
             "local function hl(group, opts) vim.api.nvim_set_hl(0, group, opts) end",
         ]
+
         ui_mappings = {
             "Normal": f"{{ fg = '{defaults['a']['fg']}', bg = '{defaults['a']['bg']}' }}",
             "LineNr": f"{{ fg = '{defaults['a']['ui']}' }}",
