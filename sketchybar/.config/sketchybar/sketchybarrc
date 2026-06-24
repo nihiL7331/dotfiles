@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+
+source "$CONFIG_DIR/colors.sh"
+
+sketchybar --bar height=32  \
+           color=$BG        \
+           shadow=off       \
+           position=top     \
+           padding_right=20 \
+           padding_left=20
+
+sketchybar --add item clock left                 \
+           --set clock update_freq=10            \
+           script="$CONFIG_DIR/plugins/clock.sh" \
+           label.color=$FG                       \
+           label.font="Menlo:Regular:12.0"       \
+           padding_right=15
+
+for i in {1..5}; do
+  sketchybar --add space space.$i left \
+             --set space.$i space=$i   \
+             icon=$i                   \
+             icon.padding_left=8       \
+             icon.padding_right=8      \
+             icon.color=$UI            \
+             icon.highlight_color=$FG  \
+             background.drawing=off
+done
+
+sketchybar --add item stats right                 \
+           --set stats update_freq=2              \
+           script="$CONFIG_DIR/plugins/stats.sh"  \
+           icon.drawing=off                       \
+           label.color=$FG                        \
+           label.font="Menlo:Regular:12.0"
+
+sketchybar --add item nas right                 \
+           --set nas update_freq=30             \
+           script="$CONFIG_DIR/plugins/nas.sh"  \
+           icon=">_ "                           \
+           icon.font="Menlo:Bold:12.0"          \
+           label.font="Menlo:Regular:12.0"      \
+           padding_right=15
+
+sketchybar --update
