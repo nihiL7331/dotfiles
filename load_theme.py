@@ -18,7 +18,20 @@ def rgb2argb_pfd(col_str):
 
 # ghostty setup
 if shutil.which("ghostty"):
+    ghostty_data = []
 
+    for key, hex_val in theme['base'].items():
+        ghostty_data.append(f"{key} = {hex_val}")
+
+    for index, hex_val in enumerate(theme["palette"]):
+        ghostty_data.append(f"palette = {index}={hex_val}")
+
+    ghostty_out = "\n".join(ghostty_data)
+
+    ghostty_path = os.path.join(DOTFILES, 'ghostty', '.config', 'ghostty', 'themes', 'current')
+    os.makedirs(os.path.dirname(ghostty_path), exist_ok=True)
+    with open(ghostty_path, 'w') as f:
+        f.write(ghostty_out)
 
 # sketchybar setup
 if shutil.which("sketchybar"):
