@@ -3,3 +3,4 @@ sketchybar/colors.sh
 ghostty/.config/ghostty/themes/current
 nvim/.config/nvim/lua/core
 nvim/.config/nvim/nvim-pack-lock.json
+sketchybar/.config/sketchybar/colors.sh
