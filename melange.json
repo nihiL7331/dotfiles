@@ -1,0 +1,28 @@
+{
+  "name": "melange_dark",
+  "base": {
+    "background": "#292522",
+    "foreground": "#ECE1D7",
+    "cursor-color": "#ECE1D7",
+    "selection-background": "#403A36",
+    "selection-foreground": "#ECE1D7"
+  },
+  "palette": [
+    "#34302C", 
+    "#BD8183", 
+    "#78997A", 
+    "#E49B5D", 
+    "#7F91B2", 
+    "#B380B0", 
+    "#7B9695", 
+    "#C1A78E", 
+    "#867462", 
+    "#D47766", 
+    "#85B695", 
+    "#EBC06D", 
+    "#A3A9CE", 
+    "#CF9BC2", 
+    "#89B3B6", 
+    "#ECE1D7"
+  ]
+}
