@@ -145,4 +145,43 @@ if shutil.which("nvim"):
 
 # sketchybar setup
 if shutil.which("sketchybar"):
-    subprocess.run(['sketchybar', '--reload'])
+    sketchybar_path = os.path.join(
+        DOTFILES, "sketchybar", ".config", "sketchybar", "colors.sh"
+    )
+    os.makedirs(os.path.dirname(sketchybar_path), exist_ok=True)
+
+    sketchybar_target = theme.get("sketchybar")
+
+    def to_argb(hex_color):
+        return f"0xff{hex_color.replace('#', '')}"
+
+    if sketchybar_target and sketchybar_target.startswith("http"):
+        try:
+            urllib.request.urlretrieve(sketchybar_target, sketchybar_path)
+        except urllib.error.URLError as e:
+            print(f"Failed to download sketchybar theme: {e}")
+            sketchybar_target = None
+
+    if not sketchybar_target or not sketchybar_target.startswith("http"):
+        defaults = theme.get("defaults", {})
+        a = defaults.get("a", {})
+        b = defaults.get("b", {})
+
+        sketchybar_data = [
+            "#!/usr/bin/env bash",
+            f"export BG={to_argb(a.get('bg', '#000000'))}",
+            f"export FG={to_argb(a.get('fg', '#FFFFFF'))}",
+            f"export UI={to_argb(a.get('ui', '#888888'))}",
+            f"export SEL={to_argb(a.get('sel', '#444444'))}",
+            f"export RED={to_argb(b.get('red', '#FF0000'))}",
+            f"export GREEN={to_argb(b.get('green', '#00FF00'))}",
+            f"export YELLOW={to_argb(b.get('yellow', '#FFFF00'))}",
+            f"export BLUE={to_argb(b.get('blue', '#0000FF'))}",
+            f"export MAGENTA={to_argb(b.get('magenta', '#FF00FF'))}",
+            f"export CYAN={to_argb(b.get('cyan', '#00FFFF'))}",
+        ]
+
+        with open(sketchybar_path, "w") as f:
+            f.write("\n".join(sketchybar_data))
+
+    subprocess.run(["sketchybar", "--reload"], check=True)
