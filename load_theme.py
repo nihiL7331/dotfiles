@@ -1,24 +1,30 @@
 import json
-import sys
 import os
 import shutil
 import subprocess
 import urllib.request
 import urllib.error
+import argparse
 
-if len(sys.argv) != 2:
-    print("Usage: python3 load_theme.py <theme.json>")
-    exit(1)
+parser = argparse.ArgumentParser(prog="load_theme")
+parser.add_argument("theme", type=str, help="Name of the theme to load (e.g. melange)")
+parser.add_argument("-a", "--apps", type=str, help="Comma-separated apps to target")
+args = parser.parse_args()
+
+if args.apps:
+    target_apps = [app.strip().lower() for app in args.apps.split(",")]
+else:
+    target_apps = None
 
 DOTFILES = os.path.dirname(os.path.abspath(__file__))
 
-with open(os.path.join(DOTFILES, sys.argv[1])) as f:
+with open(os.path.join(DOTFILES, f"{args.theme}.json")) as f:
     theme = json.load(f)
 
 theme_name = theme["name"]
 
 # ghostty setup
-if shutil.which("ghostty"):
+if (not target_apps or "ghostty" in target_apps) and shutil.which("ghostty"):
     ghostty_path = os.path.join(
         DOTFILES, "ghostty", ".config", "ghostty", "themes", "current"
     )
@@ -63,7 +69,7 @@ if shutil.which("ghostty"):
             f.write("\n".join(ghostty_data))
 
 # nvim setup
-if shutil.which("nvim"):
+if (not target_apps or "nvim" in target_apps) and shutil.which("nvim"):
     state_path = os.path.join(
         DOTFILES, "nvim", ".config", "nvim", "lua", "core", "current_theme.lua"
     )
@@ -144,7 +150,7 @@ if shutil.which("nvim"):
 
 
 # sketchybar setup
-if shutil.which("sketchybar"):
+if (not target_apps or "sketchybar" in target_apps) and shutil.which("sketchybar"):
     sketchybar_path = os.path.join(
         DOTFILES, "sketchybar", ".config", "sketchybar", "colors.sh"
     )
