@@ -29,6 +29,7 @@ stow nvim ghostty sketchybar
 python3 load_theme.py <theme> [apps]
 # theme available options: 
 # - melange
+# - catppuccin-mocha
 # apps available options (,-separated, default: all):
 # - nvim
 # - ghostty
