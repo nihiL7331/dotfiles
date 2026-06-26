@@ -38,6 +38,8 @@ do
   --  See `:help 'clipboard'`
   vim.schedule(function() vim.o.clipboard = 'unnamedplus' end)
 
+  vim.opt.fillchars:append { eob = ' ' }
+
   -- Enable break indent
   vim.o.breakindent = true
 
