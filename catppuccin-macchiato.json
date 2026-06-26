@@ -1,0 +1,22 @@
+{
+  "name": "catppuccin-macchiato",
+  "nvim": "catppuccin/nvim",
+  "ghostty": "https://raw.githubusercontent.com/catppuccin/ghostty/refs/heads/main/themes/catppuccin-macchiato.conf",
+  "defaults": {
+    "a": { 
+      "bg": "#24273a", 
+      "fg": "#cad3f5", 
+      "com": "#6e738d", 
+      "ui": "#494d64", 
+      "sel": "#5b6078", 
+      "float": "#1e2030" 
+    },
+    "b": { 
+      "red": "#ed8796", 
+      "green": "#a6da95", 
+      "yellow": "#eed49f", 
+      "blue": "#8aadf4", 
+      "magenta": "#c6a0f6", 
+      "cyan": "#8bd5ca" 
+    }
+  }}

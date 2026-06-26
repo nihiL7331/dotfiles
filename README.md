@@ -30,6 +30,7 @@ python3 load_theme.py <theme> [apps]
 # theme available options: 
 # - melange
 # - catppuccin-mocha
+# - catppuccin-macchiato
 # apps available options (,-separated, default: all):
 # - nvim
 # - ghostty
