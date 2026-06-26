@@ -66,6 +66,8 @@ require('todo-comments').setup { signs = false }
 --  A collection of various small independent plugins/modules
 vim.pack.add { gh 'nvim-mini/mini.nvim' }
 
+require('mini.pairs').setup()
+
 -- [[ Colorscheme ]]
 
 local active = require 'core.current_theme'
@@ -108,7 +110,29 @@ vim.keymap.set('n', ']p', '<Plug>(YankyCycleBackward)', { desc = 'Cycle backward
 --  and try some other statusline plugin
 local statusline = require 'mini.statusline'
 -- Set `use_icons` to true if you have a Nerd Font
-statusline.setup { use_icons = vim.g.have_nerd_font }
+
+local filename = function() return statusline.section_filename { trunc_width = 140 } end
+
+statusline.setup {
+  content = {
+    active = function()
+      local mode, mode_hl = statusline.section_mode { trunc_width = 120 }
+      local fname = filename()
+      return statusline.combine_groups {
+        { hl = mode_hl, strings = { mode } },
+        '%<',
+        { hl = 'MiniStatuslineFilename', strings = { fname } },
+        '%=',
+      }
+    end,
+    inactive = function()
+      return statusline.combine_groups {
+        { hl = 'MiniStatuslineFilename', strings = { filename() } },
+      }
+    end,
+  },
+  use_icons = vim.g.have_nerd_font,
+}
 
 -- You can configure sections in the statusline by overriding their
 -- default behavior. For example, here we set the section for
