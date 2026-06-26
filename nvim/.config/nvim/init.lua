@@ -43,3 +43,8 @@ require 'plugins.completion'
 -- Parser installation, syntax highlighting, folds, indentation
 -- ============================================================
 require 'plugins.treesitter'
+-- ============================================================
+-- SECTION 10: OIL
+-- Download, setup and keymaps for oil.nvim
+-- ============================================================
+require 'plugins.oil'
