@@ -61,8 +61,8 @@ python3 load_theme.py <theme> [apps]
 - [x] Use `argparse` for parsing arguments.
 - [x] Add `--apps` flag to `load_theme.py`
 - [x] Add `tmux` configuration.
+- [x] Add more themes for testing.
 - [ ] Add `waybar` support.
 - [ ] Add servers to `nvim` config.
 - [ ] Make using `stow` easier (nest to make `stow *` possible?).
-- [ ] Add more themes for testing.
 - [ ] Add bootstrap script.
