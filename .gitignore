@@ -1,7 +1,7 @@
 ghostty/themes/current
 sketchybar/colors.sh
 ghostty/.config/ghostty/themes/current
-nvim/.config/nvim/lua/core
+nvim/.config/nvim/lua/core/current_theme.lua
 nvim/.config/nvim/nvim-pack-lock.json
 sketchybar/.config/sketchybar/colors.sh
 tmux/.config/tmux/plugins
