@@ -26,8 +26,13 @@ stow nvim ghostty sketchybar
 3. Run the theme controller to deploy a theme
 
 ```bash
-python3 load_theme.py <theme>
-# available themes: melange.json
+python3 load_theme.py <theme> [apps]
+# theme available options: 
+# - melange
+# apps available options (,-separated, default: all):
+# - nvim
+# - ghostty
+# - sketchybar
 ```
 
 ## How it works (load_theme.py)
@@ -46,6 +51,8 @@ python3 load_theme.py <theme>
 
 ## Roadmap
 
+- [x] Use `argparse` for parsing arguments.
+- [x] Add `--apps` flag to `load_theme.py`
 - [ ] Add `waybar` support.
 - [ ] Add `tmux` configuration.
 - [ ] Add servers to `nvim` config.
