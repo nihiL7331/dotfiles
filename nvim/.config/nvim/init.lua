@@ -48,3 +48,8 @@ require 'plugins.treesitter'
 -- Download, setup and keymaps for oil.nvim
 -- ============================================================
 require 'plugins.oil'
+-- ============================================================
+-- SECTION 11: TERMINAL
+-- <C-/> toggleable horizontal-split terminal
+-- ============================================================
+require 'core.terminal'
