@@ -59,6 +59,9 @@ do
   -- Keep signcolumn off, git info represented by colors
   vim.o.signcolumn = 'no'
 
+  -- Draw a vertical line at column 100 to keep code narrow
+  vim.o.colorcolumn = '100'
+
   -- Decrease update time
   vim.o.updatetime = 250
 
