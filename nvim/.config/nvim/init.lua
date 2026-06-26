@@ -58,3 +58,8 @@ require 'core.terminal'
 -- <leader>r runs the current file based on filetype
 -- ============================================================
 require 'core.runner'
+-- ============================================================
+-- SECTION 13: LAZYGIT
+-- <leader>gg opens lazygit in a floating window
+-- ============================================================
+require 'plugins.lazygit'
