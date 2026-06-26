@@ -191,3 +191,42 @@ if (not target_apps or "sketchybar" in target_apps) and shutil.which("sketchybar
             f.write("\n".join(sketchybar_data))
 
     subprocess.run(["sketchybar", "--reload"], check=True)
+
+# tmux setup
+if (not target_apps or "tmux" in target_apps) and shutil.which("tmux"):
+    tmux_path = os.path.join(DOTFILES, "tmux", ".config", "tmux", "theme.conf")
+    os.makedirs(os.path.dirname(tmux_path), exist_ok=True)
+
+    defaults = theme.get("defaults", {})
+    a = defaults.get("a", {})
+    b = defaults.get("b", {})
+
+    bg = a.get("bg", "#000000")
+    fg = a.get("fg", "#FFFFFF")
+    com = a.get("com", "#888888")
+    ui = a.get("ui", "#444444")
+    accent = b.get("blue", "#0000FF")
+
+    tmux_data = [
+        f"set -g status-style 'fg={fg} bg={bg}'",
+        f"setw -g window-status-current-style 'fg={bg} bg={accent} nobold'",
+        "setw -g window-status-current-format ' #I #W '",
+        f"setw -g window-status-style 'fg={com} bg={bg}'",
+        f"setw -g window-status-format ' #I #[fg={fg}]#W '",
+        f"set -g pane-border-style 'fg={ui}'",
+        f"set -g pane-active-border-style 'fg={accent}'",
+    ]
+
+    with open(tmux_path, "w") as f:
+        f.write("\n".join(tmux_data))
+
+    subprocess.run(
+        ["tmux", "has-session"],
+        check=True,
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+    )
+    subprocess.run(
+        ["tmux", "source-file", os.path.expanduser("~/.config/tmux/tmux.conf")],
+        check=True,
+    )

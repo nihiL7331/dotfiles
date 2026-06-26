@@ -39,6 +39,7 @@ python3 load_theme.py <theme> [apps]
 # - nvim
 # - ghostty
 # - sketchybar
+# - tmux
 ```
 
 ## How it works (load_theme.py)
@@ -59,8 +60,8 @@ python3 load_theme.py <theme> [apps]
 
 - [x] Use `argparse` for parsing arguments.
 - [x] Add `--apps` flag to `load_theme.py`
+- [x] Add `tmux` configuration.
 - [ ] Add `waybar` support.
-- [ ] Add `tmux` configuration.
 - [ ] Add servers to `nvim` config.
 - [ ] Make using `stow` easier (nest to make `stow *` possible?).
 - [ ] Add more themes for testing.
