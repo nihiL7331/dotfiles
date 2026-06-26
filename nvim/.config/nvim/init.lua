@@ -134,7 +134,6 @@ do
   set_wrap('{', '}')
   set_wrap('[', ']')
   set_wrap('(', ')')
-  set_wrap('<', '>')
   set_wrap('"', '"')
   set_wrap("'", "'")
   set_wrap('$', '$')
