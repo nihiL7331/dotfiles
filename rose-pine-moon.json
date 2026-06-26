@@ -1,0 +1,23 @@
+{
+  "name": "rose-pine-moon",
+  "nvim": "rose-pine/neovim",
+  "ghostty": "https://raw.githubusercontent.com/rose-pine/ghostty/refs/heads/main/dist/rose-pine-moon",
+  "defaults": {
+    "a": { 
+      "bg": "#232136", 
+      "fg": "#e0def4", 
+      "com": "#6e6a86", 
+      "ui": "#393552", 
+      "sel": "#44415a", 
+      "float": "#2a273f" 
+    },
+    "b": { 
+      "red": "#eb6f92", 
+      "green": "#3e8fb0", 
+      "yellow": "#f6c177", 
+      "blue": "#9ccfd8", 
+      "magenta": "#c4a7e7", 
+      "cyan": "#ea9a97" 
+    }
+  }
+}

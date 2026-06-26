@@ -34,6 +34,7 @@ python3 load_theme.py <theme> [apps]
 # - kanagawa-dragon
 # - kanagawa-wave
 # - rose-pine
+# - rose-pine-moon
 # apps available options (,-separated, default: all):
 # - nvim
 # - ghostty
