@@ -53,3 +53,8 @@ require 'plugins.oil'
 -- <C-/> toggleable horizontal-split terminal
 -- ============================================================
 require 'core.terminal'
+-- ============================================================
+-- SECTION 12: RUNNER
+-- <leader>r runs the current file based on filetype
+-- ============================================================
+require 'core.runner'
