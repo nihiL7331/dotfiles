@@ -359,6 +359,16 @@ do
     n_lines = 500,
   }
 
+  -- Circular paste buffer
+  vim.pack.add { gh 'gbprod/yanky.nvim' }
+  require('yanky').setup {
+    ring = { history_length = 100 },
+  }
+  vim.keymap.set({ 'n', 'x' }, 'p', '<Plug>(YankyPutAfter)', { desc = 'Put text after cursor' })
+  vim.keymap.set({ 'n', 'x' }, 'P', '<Plug>(YankyPutBefore)', { desc = 'Put text before cursor' })
+  vim.keymap.set('n', '[p', '<Plug>(YankyCycleForward)', { desc = 'Cycle forward through yank history' })
+  vim.keymap.set('n', ']p', '<Plug>(YankyCycleBackward)', { desc = 'Cycle backward through yank history' })
+
   -- Simple and easy statusline.
   --  You could remove this setup call if you don't like it,
   --  and try some other statusline plugin
