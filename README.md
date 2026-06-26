@@ -32,6 +32,7 @@ python3 load_theme.py <theme> [apps]
 # - catppuccin-mocha
 # - catppuccin-macchiato
 # - kanagawa-dragon
+# - kanagawa-wave
 # apps available options (,-separated, default: all):
 # - nvim
 # - ghostty

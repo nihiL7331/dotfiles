@@ -1,0 +1,22 @@
+{
+  "name": "kanagawa-wave",
+  "nvim": "rebelot/kanagawa.nvim",
+  "ghostty": "https://raw.githubusercontent.com/rebelot/kanagawa.nvim/refs/heads/master/extras/ghostty/kanagawa-wave",
+  "defaults": {
+    "a": { 
+      "bg": "#1f1f28", 
+      "fg": "#dcd7ba", 
+      "com": "#727169", 
+      "ui": "#2a2a37", 
+      "sel": "#2d4f67", 
+      "float": "#16161d" 
+    },
+    "b": { 
+      "red": "#c34043", 
+      "green": "#76946a", 
+      "yellow": "#c0a36e", 
+      "blue": "#7e9cd8", 
+      "magenta": "#957fb8", 
+      "cyan": "#7aa89f" 
+    }
+  }}
