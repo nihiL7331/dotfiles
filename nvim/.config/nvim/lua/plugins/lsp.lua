@@ -100,6 +100,11 @@ local servers = {
       completeUnimported = true,
       clangdFileStatus = true,
     },
+    capabilities = {
+      textDocument = {
+        formatting = { dynamicRegistration = false },
+      },
+    },
   },
 
   lua_ls = {
