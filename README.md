@@ -33,6 +33,7 @@ python3 load_theme.py <theme> [apps]
 # - catppuccin-macchiato
 # - kanagawa-dragon
 # - kanagawa-wave
+# - rose-pine
 # apps available options (,-separated, default: all):
 # - nvim
 # - ghostty

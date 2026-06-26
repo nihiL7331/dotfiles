@@ -1,0 +1,23 @@
+{
+  "name": "rose-pine",
+  "nvim": "rose-pine/neovim",
+  "ghostty": "https://raw.githubusercontent.com/rose-pine/ghostty/refs/heads/main/dist/rose-pine",
+  "defaults": {
+    "a": { 
+      "bg": "#191724", 
+      "fg": "#e0def4", 
+      "com": "#6e6a86", 
+      "ui": "#26233a", 
+      "sel": "#403d52", 
+      "float": "#1f1d2e" 
+    },
+    "b": { 
+      "red": "#eb6f92", 
+      "green": "#31748f", 
+      "yellow": "#f6c177", 
+      "blue": "#9ccfd8", 
+      "magenta": "#c4a7e7", 
+      "cyan": "#ebbcba" 
+    }
+  }
+}
