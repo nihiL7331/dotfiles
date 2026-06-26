@@ -127,6 +127,10 @@ do
   --  See `:help hlsearch`
   vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 
+  -- Keep selection after indenting in v-mode
+  vim.keymap.set('v', '<', '<gv', { desc = 'Indent left and reselect' })
+  vim.keymap.set('v', '>', '>gv', { desc = 'Indent right and reselect' })
+
   -- wrap visual selection with brackets/quotes
   ---@param open string
   ---@param close string
