@@ -1,0 +1,25 @@
+add_newline = false
+
+format = """
+$directory\
+$character"""
+
+[character]
+success_symbol = "[❯](green)"
+error_symbol = "[❯](red)"
+
+[directory]
+style = "red"
+truncation_length = 3
+truncation_symbol = ""
+format = "[$path]($style) "
+
+[git_branch]
+disabled = true
+
+[git_status]
+disabled = true
+
+[cmd_duration]
+disabled = true
+
