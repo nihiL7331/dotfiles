@@ -6,3 +6,5 @@ nvim/.config/nvim/nvim-pack-lock.json
 sketchybar/.config/sketchybar/colors.sh
 tmux/.config/tmux/plugins
 tmux/.config/tmux/theme.conf
+nvim/lua/core/current_theme.lua
+tmux/theme.conf
