@@ -63,6 +63,6 @@ python3 load_theme.py <theme> [apps]
 - [x] Add `tmux` configuration.
 - [x] Add more themes for testing.
 - [x] Add servers to `nvim` config.
+- [x] Add bootstrap script.
 - [ ] Add `waybar` support.
 - [ ] Make using `stow` easier (nest to make `stow *` possible?).
-- [ ] Add bootstrap script.
