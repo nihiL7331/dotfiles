@@ -68,6 +68,12 @@ if (not target_apps or "ghostty" in target_apps) and shutil.which("ghostty"):
         with open(ghostty_path, "w") as f:
             f.write("\n".join(ghostty_data))
 
+    subprocess.run(
+        "pkill -SIGUSR2 ghostty",
+        shell=True,
+        check=True,
+    )
+
 # nvim setup
 if (not target_apps or "nvim" in target_apps) and shutil.which("nvim"):
     state_path = os.path.join(
