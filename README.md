@@ -5,7 +5,6 @@ A repository consisting of a automated pipeline for setting up my dotfiles.
 ## Requirements
 
 - `git` (for downloading `nvim` repositories),
-- `stow` (for symlinking),
 - `python3` (for the theme controller).
 
 ## Usage
