@@ -17,10 +17,10 @@ git clone https://github.com/nihiL7331/dotfiles.git
 cd ~/dotfiles
 ```
 
-2. Symlink the config files
+2. Run the bootstrap script
 
 ```bash
-stow nvim ghostty sketchybar
+bash bootstrap.sh
 ```
 
 3. Run the theme controller to deploy a theme
