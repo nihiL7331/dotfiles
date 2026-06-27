@@ -18,7 +18,7 @@ else:
 
 DOTFILES = os.path.dirname(os.path.abspath(__file__))
 
-with open(os.path.join(DOTFILES, f"{args.theme}.json")) as f:
+with open(os.path.join(DOTFILES, f"themes/{args.theme}.json")) as f:
     theme = json.load(f)
 
 theme_name = theme["name"]
