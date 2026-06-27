@@ -5,6 +5,7 @@ set -euo pipefail
 XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
 ZSH_PLUGINS="$HOME/.local/share/zsh/plugins"
 DOTFILES="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+FONT_DIR="$HOME/.local/share/fonts"
 
 mkdir -p "$XDG_CONFIG_HOME"
 mkdir -p "$ZSH_PLUGINS"
@@ -12,6 +13,17 @@ mkdir -p "$ZSH_PLUGINS"
 SUDO=""
 if [ "$(id -u)" -ne 0 ]; then
   SUDO="sudo"
+fi
+
+if ! fc-list | grep -qi "BlexMono"; then
+  mkdir -p "$FONT_DIR"
+  tmp="$(mktemp -d)"
+  curl -fsSL -o "$tmp/blex.zip" \
+    https://github.com/ryanoasis/nerd-fonts/releases/latest/download/IBMPlexMono.zip \
+    && unzip -q "$tmp/blex.zip" -d "$FONT_DIR" \
+    && fc-cache -f "$FONT_DIR" \
+    || echo "Warning: BlexMono install failed" >&2
+  rm -rf "$tmp"
 fi
 
 if command -v apt-get &> /dev/null; then
