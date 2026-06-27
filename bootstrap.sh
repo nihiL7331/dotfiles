@@ -3,9 +3,11 @@
 set -euo pipefail
 
 XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
+ZSH_PLUGINS="$HOME/.local/share/zsh/plugins"
 DOTFILES="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 mkdir -p "$XDG_CONFIG_HOME"
+mkdir -p "$ZSH_PLUGINS"
 
 SUDO=""
 if [ "$(id -u)" -ne 0 ]; then
@@ -23,6 +25,17 @@ else
   echo "No recognized package manager. Quitting." >&2
   exit 1
 fi
+
+for repo in zsh-users/zsh-autosuggestions zsh-users/zsh-syntax-highlighting; do
+  dest="$ZSH_PLUGINS/$(basename "$repo")"
+  if [ ! -d "$dest" ]; then
+    git clone --depth 1 "https://github.com/$repo" "$dest" \
+      || echo "Warning: failed to clone $repo" >&2
+  fi
+done
+
+# zsh
+ln -sfn "$DOTFILES/zsh/.zshrc" "$HOME/.zshrc"
 
 # neovim
 ln -sfn "$DOTFILES/nvim" "$XDG_CONFIG_HOME/nvim"
