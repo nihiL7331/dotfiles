@@ -25,9 +25,7 @@ theme_name = theme["name"]
 
 # ghostty setup
 if (not target_apps or "ghostty" in target_apps) and shutil.which("ghostty"):
-    ghostty_path = os.path.join(
-        DOTFILES, "ghostty", ".config", "ghostty", "themes", "current"
-    )
+    ghostty_path = os.path.join(DOTFILES, "ghostty", "themes", "current")
     os.makedirs(os.path.dirname(ghostty_path), exist_ok=True)
 
     ghostty_target = theme.get("ghostty")
@@ -76,9 +74,7 @@ if (not target_apps or "ghostty" in target_apps) and shutil.which("ghostty"):
 
 # nvim setup
 if (not target_apps or "nvim" in target_apps) and shutil.which("nvim"):
-    state_path = os.path.join(
-        DOTFILES, "nvim", ".config", "nvim", "lua", "core", "current_theme.lua"
-    )
+    state_path = os.path.join(DOTFILES, "nvim", "lua", "core", "current_theme.lua")
     os.makedirs(os.path.dirname(state_path), exist_ok=True)
 
     nvim_target = theme.get("nvim")
@@ -106,7 +102,7 @@ if (not target_apps or "nvim" in target_apps) and shutil.which("nvim"):
             f.write(f"return '{theme_name}'")
 
     else:
-        colors_dir = os.path.join(DOTFILES, "nvim", ".config", "nvim", "colors")
+        colors_dir = os.path.join(DOTFILES, "nvim", "colors")
         os.makedirs(colors_dir, exist_ok=True)
         fallback_path = os.path.join(colors_dir, f"{theme_name}.lua")
 
@@ -157,9 +153,7 @@ if (not target_apps or "nvim" in target_apps) and shutil.which("nvim"):
 
 # sketchybar setup
 if (not target_apps or "sketchybar" in target_apps) and shutil.which("sketchybar"):
-    sketchybar_path = os.path.join(
-        DOTFILES, "sketchybar", ".config", "sketchybar", "colors.sh"
-    )
+    sketchybar_path = os.path.join(DOTFILES, "sketchybar", "colors.sh")
     os.makedirs(os.path.dirname(sketchybar_path), exist_ok=True)
 
     sketchybar_target = theme.get("sketchybar")
@@ -200,7 +194,7 @@ if (not target_apps or "sketchybar" in target_apps) and shutil.which("sketchybar
 
 # tmux setup
 if (not target_apps or "tmux" in target_apps) and shutil.which("tmux"):
-    tmux_path = os.path.join(DOTFILES, "tmux", ".config", "tmux", "theme.conf")
+    tmux_path = os.path.join(DOTFILES, "tmux", "theme.conf")
     os.makedirs(os.path.dirname(tmux_path), exist_ok=True)
 
     defaults = theme.get("defaults", {})
