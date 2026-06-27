@@ -4,7 +4,6 @@ set -euo pipefail
 
 XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
 DOTFILES="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-DEFAULT_THEME="melange"
 
 mkdir -p "$XDG_CONFIG_HOME"
 
@@ -38,6 +37,3 @@ ln -sfn "$DOTFILES/tmux/.config/tmux" "$XDG_CONFIG_HOME/tmux"
 if [[ "$(uname)" == "Darwin" ]]; then
   ln -sfn "$DOTFILES/sketchybar/.config/sketchybar" "$XDG_CONFIG_HOME/sketchybar"
 fi
-
-# theme
-python3 "$DOTFILES/load_theme.py" "$DEFAULT_THEME"
