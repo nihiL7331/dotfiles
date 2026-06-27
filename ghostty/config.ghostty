@@ -3,7 +3,7 @@ background-opacity=1.0
 background-blur=false
 macos-hidden=always
 font-size = 12
-font-family = "BigBlueTermPlus Nerd Font"
+font-family = "Maple Mono NF"
 freetype-load-flags = monochrome
 font-thicken = false
 
