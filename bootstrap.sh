@@ -25,15 +25,15 @@ else
 fi
 
 # neovim
-ln -sfn "$DOTFILES/nvim/.config/nvim" "$XDG_CONFIG_HOME/nvim"
+ln -sfn "$DOTFILES/nvim" "$XDG_CONFIG_HOME/nvim"
 
 # ghostty
-ln -sfn "$DOTFILES/ghostty/.config/ghostty" "$XDG_CONFIG_HOME/ghostty"
+ln -sfn "$DOTFILES/ghostty" "$XDG_CONFIG_HOME/ghostty"
 
 # tmux
-ln -sfn "$DOTFILES/tmux/.config/tmux" "$XDG_CONFIG_HOME/tmux"
+ln -sfn "$DOTFILES/tmux" "$XDG_CONFIG_HOME/tmux"
 
 # sketchybar
 if [[ "$(uname)" == "Darwin" ]]; then
-  ln -sfn "$DOTFILES/sketchybar/.config/sketchybar" "$XDG_CONFIG_HOME/sketchybar"
+  ln -sfn "$DOTFILES/sketchybar" "$XDG_CONFIG_HOME/sketchybar"
 fi
