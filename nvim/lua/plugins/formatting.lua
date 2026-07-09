@@ -19,6 +19,11 @@ require('conform').setup {
     cpp = { 'clang-format' },
     c = { 'clang-format' },
   },
+  formatters = {
+    ['clang-format'] = {
+      prepend_args = { '--style={IndentWidth: 4}' },
+    },
+  },
 }
 
 vim.keymap.set(
