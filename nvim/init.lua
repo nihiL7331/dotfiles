@@ -15,7 +15,7 @@ require 'core.keymaps'
 require 'core.pack_init'
 -- ============================================================
 -- SECTION 4: UI / CORE UX PLUGINS
--- guess-indent, gitsigns, which-key, colorscheme, todo-comments, mini modules
+-- gitsigns, which-key, colorscheme, todo-comments, mini modules
 -- ============================================================
 require 'plugins.ui'
 -- ============================================================
