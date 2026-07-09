@@ -61,6 +61,9 @@ ln -sfn "$DOTFILES/tmux" "$XDG_CONFIG_HOME/tmux"
 # starship
 ln -sfn "$DOTFILES/starship/starship.toml" "$XDG_CONFIG_HOME/starship.toml"
 
+# skhd
+ln -sfn "$DOTFILES/skhd" "$XDG_CONFIG_HOME/skhd"
+
 # sketchybar
 if [[ "$(uname)" == "Darwin" ]]; then
   ln -sfn "$DOTFILES/sketchybar" "$XDG_CONFIG_HOME/sketchybar"
