@@ -65,3 +65,9 @@ ln -sfn "$DOTFILES/starship/starship.toml" "$XDG_CONFIG_HOME/starship.toml"
 if [[ "$(uname)" == "Darwin" ]]; then
   ln -sfn "$DOTFILES/sketchybar" "$XDG_CONFIG_HOME/sketchybar"
 fi
+
+if [ ! -d "$HOME/.virtualenvs/scripts_env" ]; then
+    echo "Creating Python scripting venv..."
+    python3 -m venv "$HOME/.virtualenvs/scripts_env"
+    "$HOME/.virtualenvs/scripts_env/bin/pip" install --upgrade pip
+fi
