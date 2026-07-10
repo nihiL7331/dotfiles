@@ -7,6 +7,7 @@ yabai -m config bottom_padding 1
 yabai -m config left_padding 1
 yabai -m config right_padding 1
 yabai -m config window_gap 8
+yabai -m config menubar_opacity 0.0
 
 yabai -m config external_bar all:32:0
 yabai -m config window_topmost on
