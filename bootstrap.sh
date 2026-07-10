@@ -15,7 +15,7 @@ if [ "$(id -u)" -ne 0 ]; then
   SUDO="sudo"
 fi
 
-if ! fc-list | grep -qi "BlexMono"; then
+if ! fc-list | grep "BlexMono"; then
   mkdir -p "$FONT_DIR"
   tmp="$(mktemp -d)"
   curl -fsSL -o "$tmp/blex.zip" \
