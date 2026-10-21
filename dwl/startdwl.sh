@@ -7,8 +7,8 @@ export _JAVA_AWT_WM_NONREPARENTING=1
 
 DWLB_DIR="$HOME/repos/dwlb"
 
-if [ ! -d "$DWLB_DIR" ]; then
-    exec dwl
+if [ -x "$DWLB_DIR/dwlb-status.sh" ] && command -v dwlb >/dev/null 2>&1; then
+    exec dwl -s "$DWLB_DIR/dwlb-status.sh | dwlb -status-stdin all & exec dwlb -status-commands -font 'GohuFont uni11 Nerd Font Mono'"
 else
-    exec dwl -s 'sh -c "$DWLB_DIR/dwlb-status.sh | dwlb -status-stdin all & exec dwlb -status-commands -font \"GohuFont uni11 Nerd Font Mono\""'
+    exec dwl
 fi
