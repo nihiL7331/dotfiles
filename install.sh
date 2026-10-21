@@ -43,7 +43,7 @@ link "$BASE_SRC/home/gitconfig"                     "$HOME/.gitconfig"
 link_if_exists "$BASE_SRC/dwl/startdwl.sh"          "$REPOS_DST/dwl/startdwl.sh"
 link_if_exists "$BASE_SRC/dwl/config.h"             "$REPOS_DST/dwl/config.h"
 link_if_exists "$BASE_SRC/dwl/dwl.c"                "$REPOS_DST/dwl/dwl.c"
-link_if_exists "$BASE_SRC/dwlb/dwlb-status.sh"      "$REPOS_DST/dwlb/dwlb-status"
+link_if_exists "$BASE_SRC/dwlb/dwlb-status.sh"      "$REPOS_DST/dwlb/dwlb-status.sh"
 link_if_exists "$BASE_SRC/dwlb/config.h"            "$REPOS_DST/dwlb/config.h"
 # ---------------------------------------------------------------------------------anyrun
 link_if_exists "$BASE_SRC/anyrun/config.ron"        "$CFG_DST/anyrun/config.ron"
