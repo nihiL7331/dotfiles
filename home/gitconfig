@@ -1,0 +1,8 @@
+[user]
+	name = nihiL7331
+	email = 163222150+nihiL7331@users.noreply.github.com
+	signingkey = /home/nihil/.ssh/id_ed25519.pub
+[gpg]
+	format = ssh
+[commit]
+	gpgsign = true

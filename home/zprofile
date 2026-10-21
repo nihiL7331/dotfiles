@@ -1,0 +1,22 @@
+# set PATH so it includes user's private bin if it exists
+
+DWL_DIR="$HOME/repos/dwl"
+
+if [ -d "$HOME/bin" ] ; then
+    PATH="$HOME/bin:$PATH"
+fi
+
+if [ -d "$HOME/.local/bin" ] ; then
+    PATH="$HOME/.local/bin:$PATH"
+fi
+
+
+if [ "$(tty)" = "/dev/tty1" ]; then
+    if [ -d "$DWL_DIR" ]; then
+        exec dbus-run-session bash -c "exec $DWL_DIR/startdwl.sh"
+    fi
+fi
+
+. "$HOME/.cargo/env"
+export PATH="$PATH:/opt/nvim-linux-x86_64/bin"
+export PATH="$HOME/.local/bin:$PATH"

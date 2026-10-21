@@ -1,0 +1,18 @@
+profile "gulcz" {
+	output "Acer Technologies GN246HL LW3EE0058532" mode 1920x1080@60 position 0,0      scale 1
+	output "eDP-1"                                  mode 1920x1080@60 position 320,1080 scale 1
+}
+
+profile "wroclaw" {
+	output "Shenzhen KTC Technology Group H27T22 0x00000001" mode 2560x1440@60 position 0,0      scale 1
+	output "eDP-1"                                           mode 1920x1080@60 position 320,1440 scale 1
+}
+
+profile "present" {
+	output "eDP-1" mode 1920x1080@60 position 0,0 scale 1
+	output *       mode 1920x1080@60 position 0,0 scale 1
+}
+
+profile "mobile" {
+	output "eDP-1" mode 1920x1080@60 position 0,0 scale 1
+}

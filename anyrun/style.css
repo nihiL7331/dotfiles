@@ -1,0 +1,52 @@
+window {
+	background: none;
+	background-color: #000000;
+}
+
+#main {
+	background: #000000;
+	border: 1px solid #333333;
+	border-radius: 0;
+	padding: 8px;
+}
+
+#entry {
+	background: #000000;
+	color: #ffffff;
+	border: none;
+	border-bottom: 1px solid #333333;
+	border-radius: 0;
+	padding: 8px;
+	margin-bottom: 8px;
+	box-shadow: none;
+}
+
+listbox {
+	background: none;
+	background-color: #000000;
+}
+
+row {
+	background: none;
+	background-color: #000000;
+	border-radius: 0;
+	padding: 6px 8px;
+}
+
+row:selected {
+	background-image: none;
+	background: #111111;
+	border-left: 2px solid #ffffff;
+}
+
+label#match-desc {
+	color: #aaaaaa;
+	font-size: 12px;
+}
+
+* {
+	font-size: 24px;
+    font-family: "GohuFont uni11 Nerd Font Mono";
+	color: #ffffff;	
+	box-shadow: none;
+}

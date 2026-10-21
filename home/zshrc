@@ -1,0 +1,18 @@
+ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
+source "${ZINIT_HOME}/zinit.zsh"
+
+zinit light zsh-users/zsh-syntax-highlighting
+zinit light zsh-users/zsh-autosuggestions
+zinit light zsh-users/zsh-completions
+
+eval "$(starship init zsh)"
+
+SPEAKERS="65:2B:7A:3E:CA:56"
+AIRPODS="07:11:34:03:3E:6F"
+
+alias nmtui='sudo nmtui'
+alias ls='ls -al --color=auto'
+
+. "$HOME/.cargo/env"
+
+export PATH="$HOME/.local/bin:$PATH"
