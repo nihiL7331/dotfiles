@@ -92,6 +92,7 @@ local function apply_oled_dark()
   vim.api.nvim_set_hl(0, "WinSeparator",  { bg = "#000000", fg = "#222222" })
   vim.api.nvim_set_hl(0, "FloatBorder",   { bg = "#000000", fg = "#333333" })
   vim.api.nvim_set_hl(0, "Cursor",        { bg = "#ffffff", fg = "#000000" })
+  vim.api.nvim_set_hl(0, "ColorColumn",   { bg = "#161616" })
 end
 
 local function apply_oled_light()
@@ -109,6 +110,7 @@ local function apply_oled_light()
   vim.api.nvim_set_hl(0, "WinSeparator",  { bg = "#ffffff", fg = "#dddddd" })
   vim.api.nvim_set_hl(0, "FloatBorder",   { bg = "#ffffff", fg = "#cccccc" })
   vim.api.nvim_set_hl(0, "Cursor",        { bg = "#000000", fg = "#ffffff" })
+  vim.api.nvim_set_hl(0, "ColorColumn",   { bg = "#f0f0f0" })
 end
 
 local function load_saved_theme()
@@ -299,6 +301,7 @@ opt.scrolloff = 8
 opt.sidescrolloff = 8
 opt.termguicolors = true
 opt.guicursor = "n-v-c-sm:block-Cursor,i-ci-ve:ver25-Cursor,r-cr-o:hor20-Cursor"
+opt.colorcolumn = "80"
 
 -- Indentation (4 spaces default for C / Algorithms / Uni projects)
 opt.tabstop = 4
