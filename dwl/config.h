@@ -20,13 +20,13 @@ static const float urgentcolor[]           = COLOR(0xff0000ff);
 static const float fullscreen_bg[]         = {0.1f, 0.1f, 0.1f, 1.0f}; /* You can also use glsl colors */
 
 static const char *const autostart[] = {
-	"pipewire",                 				   				   NULL,
-	"wireplumber",              				   				   NULL,
-	"pipewire-pulse",           				   				   NULL,
-	"anyrun",         "daemon", 				   				   NULL,
-	"wbg",            "/home/nihil/repos/dotfiles/ascii-wallpaper.png",   NULL,
-	"wl-paste",       "text",                                  "--watch", "cliphist", "store", NULL,
-	"kanshi",                                                                                  NULL,
+	"pipewire",                 				   				                                                   NULL,
+	"wireplumber",              				   				                                                   NULL,
+	"pipewire-pulse",           				   				                                                   NULL,
+	"anyrun",         "daemon", 				   				                                                   NULL,
+	"wbg",            "/home/nihil/repos/dotfiles/wallpapers/ascii-wallpaper.png",                                 NULL,
+	"wl-paste",       "text",                                                      "--watch", "cliphist", "store", NULL,
+	"kanshi",                                                                                                      NULL,
 	NULL /* terminate */
 };
 
