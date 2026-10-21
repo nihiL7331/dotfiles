@@ -728,21 +728,19 @@ for key, p in pairs(pairs_to_wrap) do
 end
 
 -- 6. Clipboard Ring Buffer (Synchronized with cliphist)
--- 'p' / 'P' pastes from ring; immediately after pasting, press '[p' (older) or ']p' (newer) to cycle
+-- 'p' / 'P' pastes from ring; immediately after pasting, cycle with:
+--   '[p' / '[y' / '<C-p>' (older)
+--   ']p' / ']y' / '<C-n>' (newer)
 -- '<leader>p' opens mini.pick clipboard history picker
-local clip_ns = vim.api.nvim_create_namespace("clip_ring")
 local clip_items = {}
 local clip_local_ring = {}
 local clip_idx = 1
 local clip_active = false
 local clip_in_progress = false
 local clip_bufnr = nil
-local clip_pre_cursor = nil
-local clip_expected_cursor = nil
 local clip_last_cmd = "p"
-local clip_is_linewise = false
-local clip_mark_start = nil
-local clip_mark_end = nil
+local clip_expected_cursor = nil
+local clip_paste_tick = nil
 local clip_augroup = nil
 
 local clip_cleanup
@@ -756,7 +754,7 @@ local function get_cliphist_items(max)
   local list = {}
   for line in out:gmatch("[^\r\n]+") do
     local id, preview = line:match("^(%d+)\t(.*)$")
-    if id and preview then
+    if id and preview and not preview:match("^%[%[%s*binary%s+data") then
       table.insert(list, { id = id, preview = preview, text = nil, regtype = nil })
       if #list >= max then break end
     end
@@ -828,57 +826,9 @@ vim.api.nvim_create_autocmd("TextYankPost", {
   end,
 })
 
-local function remove_last_paste()
-  if not clip_bufnr or not vim.api.nvim_buf_is_valid(clip_bufnr) then return false end
-  if not clip_mark_start or not clip_mark_end then return false end
-
-  local s_pos = vim.api.nvim_buf_get_extmark_by_id(clip_bufnr, clip_ns, clip_mark_start, {})
-  local e_pos = vim.api.nvim_buf_get_extmark_by_id(clip_bufnr, clip_ns, clip_mark_end, {})
-  if not s_pos or not e_pos or #s_pos == 0 or #e_pos == 0 then return false end
-
-  pcall(vim.cmd, "undojoin")
-  if clip_is_linewise then
-    vim.api.nvim_buf_set_lines(clip_bufnr, s_pos[1], e_pos[1] + 1, false, {})
-  else
-    vim.api.nvim_buf_set_text(clip_bufnr, s_pos[1], s_pos[2], e_pos[1], e_pos[2], {})
-  end
-
-  if clip_pre_cursor then
-    pcall(vim.api.nvim_win_set_cursor, 0, clip_pre_cursor)
-  end
-  return true
-end
-
-local function record_paste(cmd, regtype)
-  clip_bufnr = vim.api.nvim_get_current_buf()
-  clip_last_cmd = cmd
-  clip_is_linewise = (regtype == "V" or regtype == "line")
-
-  local s = vim.api.nvim_buf_get_mark(0, "[")
-  local e = vim.api.nvim_buf_get_mark(0, "]")
-
-  if clip_mark_start then pcall(vim.api.nvim_buf_del_extmark, clip_bufnr, clip_ns, clip_mark_start) end
-  if clip_mark_end then pcall(vim.api.nvim_buf_del_extmark, clip_bufnr, clip_ns, clip_mark_end) end
-
-  local s_row = math.max(0, s[1] - 1)
-  local s_col = s[2]
-  local e_row = math.max(0, e[1] - 1)
-  local e_col = e[2] + 1
-
-  clip_mark_start = vim.api.nvim_buf_set_extmark(clip_bufnr, clip_ns, s_row, s_col, { right_gravity = false })
-  clip_mark_end = vim.api.nvim_buf_set_extmark(clip_bufnr, clip_ns, e_row, e_col, { right_gravity = true })
-  clip_expected_cursor = vim.api.nvim_win_get_cursor(0)
-end
-
 clip_cleanup = function()
   if not clip_active or clip_in_progress then return end
   clip_active = false
-  if clip_bufnr and vim.api.nvim_buf_is_valid(clip_bufnr) then
-    if clip_mark_start then pcall(vim.api.nvim_buf_del_extmark, clip_bufnr, clip_ns, clip_mark_start) end
-    if clip_mark_end then pcall(vim.api.nvim_buf_del_extmark, clip_bufnr, clip_ns, clip_mark_end) end
-  end
-  clip_mark_start = nil
-  clip_mark_end = nil
   if clip_augroup then
     pcall(vim.api.nvim_del_augroup_by_id, clip_augroup)
     clip_augroup = nil
@@ -889,23 +839,32 @@ end
 local function setup_cycle_autocmds()
   if clip_augroup then pcall(vim.api.nvim_del_augroup_by_id, clip_augroup) end
   clip_augroup = vim.api.nvim_create_augroup("ClipCycling", { clear = true })
-  vim.api.nvim_create_autocmd({ "InsertEnter", "BufLeave" }, {
+
+  vim.api.nvim_create_autocmd({ "InsertEnter", "BufLeave", "WinLeave" }, {
     group = clip_augroup,
-    callback = function()
-      clip_cleanup()
-    end,
+    callback = clip_cleanup,
   })
+
+  vim.api.nvim_create_autocmd("ModeChanged", {
+    group = clip_augroup,
+    pattern = "*:[!n]*",
+    callback = clip_cleanup,
+  })
+
   vim.api.nvim_create_autocmd("TextChanged", {
     group = clip_augroup,
     callback = function()
-      if clip_in_progress then return end
+      if clip_in_progress or not clip_active then return end
+      local tick = vim.api.nvim_buf_get_changedtick(clip_bufnr or 0)
+      if tick == clip_paste_tick then return end
       clip_cleanup()
     end,
   })
+
   vim.api.nvim_create_autocmd("CursorMoved", {
     group = clip_augroup,
     callback = function()
-      if clip_in_progress then return end
+      if clip_in_progress or not clip_active then return end
       local cur = vim.api.nvim_win_get_cursor(0)
       if clip_expected_cursor and cur[1] == clip_expected_cursor[1] and cur[2] == clip_expected_cursor[2] then
         return
@@ -925,28 +884,37 @@ local function paste_at_index(idx, cmd)
   vim.fn.setreg("+", text, regtype)
 
   if clip_active then
-    remove_last_paste()
-    pcall(vim.cmd, "undojoin")
+    local ok = pcall(vim.cmd, "silent! undo")
+    if not ok then
+      clip_cleanup()
+      clip_in_progress = false
+      return
+    end
     vim.cmd("normal! " .. clip_last_cmd)
-    record_paste(clip_last_cmd, regtype)
   else
-    clip_pre_cursor = vim.api.nvim_win_get_cursor(0)
+    clip_bufnr = vim.api.nvim_get_current_buf()
+    clip_last_cmd = cmd
     clip_active = true
     vim.cmd("normal! " .. cmd)
-    record_paste(cmd, regtype)
     setup_cycle_autocmds()
   end
 
+  clip_expected_cursor = vim.api.nvim_win_get_cursor(0)
+  clip_paste_tick = vim.api.nvim_buf_get_changedtick(clip_bufnr)
   clip_idx = idx
   clip_in_progress = false
 
   local preview = item.preview or text:gsub("\n.*$", "")
   if #preview > 35 then preview = preview:sub(1, 32) .. "..." end
-  local msg = string.format("clip [%d/%d] %s  [p prev  ]p next", clip_idx, #clip_items, preview)
+  local msg = string.format("clip [%d/%d] %s  ([p]/<C-p> older  ]p/<C-n> newer  <Esc> done)", clip_idx, #clip_items, preview)
   vim.api.nvim_echo({ { msg, "ModeMsg" } }, false, {})
 end
 
 local function paste_ring(cmd)
+  if not vim.bo.modifiable or vim.bo.readonly then
+    vim.cmd("normal! " .. cmd)
+    return
+  end
   clip_cleanup()
   clip_items = load_all_clips()
   if #clip_items == 0 then
@@ -983,6 +951,30 @@ vim.keymap.set("n", "[p", function() cycle_clip(1) end, { desc = "Previous (olde
 vim.keymap.set("n", "]p", function() cycle_clip(-1) end, { desc = "Next (newer) clipboard entry" })
 vim.keymap.set("n", "[y", function() cycle_clip(1) end, { desc = "Previous (older) clipboard entry" })
 vim.keymap.set("n", "]y", function() cycle_clip(-1) end, { desc = "Next (newer) clipboard entry" })
+
+vim.keymap.set("n", "<C-p>", function()
+  if clip_active then
+    cycle_clip(1)
+  else
+    vim.cmd("normal! <C-p>")
+  end
+end, { desc = "Previous (older) clipboard entry when cycling" })
+
+vim.keymap.set("n", "<C-n>", function()
+  if clip_active then
+    cycle_clip(-1)
+  else
+    vim.cmd("normal! <C-n>")
+  end
+end, { desc = "Next (newer) clipboard entry when cycling" })
+
+vim.keymap.set("n", "<Esc>", function()
+  if clip_active then
+    clip_cleanup()
+  else
+    vim.cmd("nohlsearch")
+  end
+end, { desc = "Clear search highlight / dismiss clip cycle" })
 
 local function pick_clipboard_ring()
   clip_cleanup()
