@@ -19,7 +19,21 @@ CAP_L="^fg(${CAP_COL})▕^fg()"
 CAP_R="^fg(${CAP_COL})▏^fg()"
 
 # temp input file for cpu
-TEMP_INPUT="/sys/class/hwmon/hwmon5/temp1_input"
+TEMP_INPUT=""
+for h in /sys/class/hwmon/hwmon*(N); do
+	if [[ -f "$h/name" ]] && grep -q -E '^(coretemp|k10temp|zenpower)$' "$h/name"; then
+		TEMP_INPUT="$h/temp1_input"
+		break
+	fi
+done
+if [[ -z "$TEMP_INPUT" || ! -f "$TEMP_INPUT" ]]; then
+	for h in /sys/class/hwmon/hwmon*(N); do
+		if [[ -f "$h/name" ]] && grep -q -E '^(thinkpad|cpu_thermal)$' "$h/name"; then
+			TEMP_INPUT="$h/temp1_input"
+			break
+		fi
+	done
+fi
 
 set_fg() {
     local col="$1"
@@ -55,7 +69,7 @@ get_cpu_str() {
 	read -r raw_temp < "$TEMP_INPUT" 2>/dev/null
 	local temp_c=$(( ${raw_temp:-0} / 1000 ))
 
-    printf "CPU %d%% %d°" "$cpu_perc" "$temp_c"
+    CPU_STR="CPU ${cpu_perc}% ${temp_c}°"
 }
 
 get_ram_str() {
@@ -129,9 +143,9 @@ get_power_str() {
 		set_char_by_perc ${bat_cap:-100} "$BAT_ICONS"
 		[[ "$bat_status" == "Charging" ]] && _char="󰂄"
         if [[ $bat_cap -lt 20 ]]; then
-            printf "%s%c %d%%%s %s | " "$(set_fg "$BAT_LOW_COL")" "$_char" "$bat_cap" "$(set_fg "")" "$watts"
+            printf "%s%s %d%%%s %s | " "$(set_fg "$BAT_LOW_COL")" "$_char" "$bat_cap" "$(set_fg "")" "$watts"
         else
-            printf "%c %s\% %s | " "$_char" "$bat_cap" "$watts"
+            printf "%s %s%% %s | " "$_char" "$bat_cap" "$watts"
         fi
 	else
 		POWER_STR=""
@@ -139,8 +153,9 @@ get_power_str() {
 }
 
 update_status() {
+	get_cpu_str
 	strftime -s CLOCK "%a %H:%M:%S" $EPOCHSECONDS
-    printf "%s | %s | %s %s | %s%s%s\n" "$(get_cpu_str)" "$(get_ram_str)" "$(get_bri_str)" "$(get_vol_str)" "$(get_bt_str)" "$(get_power_str)" "$CLOCK"
+    printf "%s | %s | %s %s | %s%s%s\n" "$CPU_STR" "$(get_ram_str)" "$(get_bri_str)" "$(get_vol_str)" "$(get_bt_str)" "$(get_power_str)" "$CLOCK"
 }
 
 trap 'update_status' USR1
