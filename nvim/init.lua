@@ -301,7 +301,7 @@ opt.scrolloff = 8
 opt.sidescrolloff = 8
 opt.termguicolors = true
 opt.guicursor = "n-v-c-sm:block-Cursor,i-ci-ve:ver25-Cursor,r-cr-o:hor20-Cursor"
-opt.colorcolumn = "80"
+opt.colorcolumn = "100"
 
 -- Indentation (4 spaces default for C / Algorithms / Uni projects)
 opt.tabstop = 4
