@@ -352,9 +352,10 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
--- Bundled Tree-sitter for C / C++ / Lua
+-- Bundled Tree-sitter for C / C++ / Lua / Typst
+vim.filetype.add({ extension = { typ = "typst" } })
 vim.api.nvim_create_autocmd("FileType", {
-  pattern = { "c", "cpp", "lua" },
+  pattern = { "c", "cpp", "lua", "typst" },
   callback = function(args)
     pcall(vim.treesitter.start, args.buf)
   end,
@@ -626,8 +627,12 @@ local function run_c_project()
     local out_bin = "/tmp/" .. filename
     run_cmd = string.format([[g++ -std=c++20 -Wall -Wextra -O2 -g %q -o %q -lm && %q]], cur_file, out_bin, out_bin)
     mode_desc = "g++: " .. filename
+  elseif ext == "typ" then
+    local out_pdf = vim.fn.fnamemodify(cur_file, ":r") .. ".pdf"
+    run_cmd = string.format([[typst compile %q %q]], cur_file, out_pdf)
+    mode_desc = "typst: " .. filename
   else
-    vim.notify("No CMake, nob, Makefile, or C/C++ source detected", vim.log.levels.WARN)
+    vim.notify("No CMake, nob, Makefile, C/C++, or Typst source detected", vim.log.levels.WARN)
     return
   end
 
@@ -1471,6 +1476,20 @@ vim.lsp.config["clangd"] = {
 }
 vim.lsp.enable("clangd")
 
+-- Typst LSP Configuration (Tinymist)
+vim.lsp.config["tinymist"] = {
+  cmd = { "tinymist" },
+  filetypes = { "typst" },
+  capabilities = capabilities,
+  offset_encoding = "utf-8",
+  root_markers = { "typst.toml", ".git" },
+  settings = {
+    exportPdf = "onSave",
+    formatterMode = "typstyle",
+  },
+}
+vim.lsp.enable("tinymist")
+
 -- Check if a .clang-format file exists within the current repository / project
 local function has_repo_clang_format(bufnr)
   bufnr = (bufnr and bufnr ~= 0) and bufnr or vim.api.nvim_get_current_buf()
@@ -1699,15 +1718,23 @@ vim.keymap.set("n", "<leader>gd", smart_goto_definition, { desc = "Go to definit
 vim.api.nvim_create_autocmd("LspAttach", {
   callback = function(args)
     local opts = { buffer = args.buf }
-    vim.keymap.set("n", "gd", smart_goto_definition, vim.tbl_extend("force", opts, { desc = "Go to definition (.c <-> .h)" }))
-    vim.keymap.set("n", "<leader>gd", smart_goto_definition, vim.tbl_extend("force", opts, { desc = "Go to definition (.c <-> .h)" }))
+    local ft = vim.bo[args.buf].filetype
+    if ft == "c" or ft == "cpp" or ft == "objc" or ft == "objcpp" then
+      vim.keymap.set("n", "gd", smart_goto_definition, vim.tbl_extend("force", opts, { desc = "Go to definition (.c <-> .h)" }))
+      vim.keymap.set("n", "<leader>gd", smart_goto_definition, vim.tbl_extend("force", opts, { desc = "Go to definition (.c <-> .h)" }))
+    else
+      vim.keymap.set("n", "gd", vim.lsp.buf.definition, vim.tbl_extend("force", opts, { desc = "Go to definition" }))
+      vim.keymap.set("n", "<leader>gd", vim.lsp.buf.definition, vim.tbl_extend("force", opts, { desc = "Go to definition" }))
+    end
     vim.keymap.set("n", "K", vim.lsp.buf.hover, vim.tbl_extend("force", opts, { desc = "Hover doc" }))
     vim.keymap.set("n", "<leader>cr", vim.lsp.buf.rename, vim.tbl_extend("force", opts, { desc = "Rename symbol" }))
     vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, vim.tbl_extend("force", opts, { desc = "Code actions" }))
     vim.keymap.set("n", "<leader>cf", function()
-      if not has_repo_clang_format(args.buf) then
-        vim.notify("Formatting disabled: No .clang-format found in repository", vim.log.levels.WARN)
-        return
+      if ft == "c" or ft == "cpp" or ft == "objc" or ft == "objcpp" then
+        if not has_repo_clang_format(args.buf) then
+          vim.notify("Formatting disabled: No .clang-format found in repository", vim.log.levels.WARN)
+          return
+        end
       end
       vim.lsp.buf.format({ bufnr = args.buf, timeout_ms = 2000 })
     end, vim.tbl_extend("force", opts, { desc = "Format buffer" }))
@@ -1809,18 +1836,25 @@ end
 vim.keymap.set("n", "<leader>F", toggle_autoformat, { desc = "Toggle autoformat" })
 
 vim.api.nvim_create_autocmd("BufWritePre", {
-  pattern = { "*.c", "*.h", "*.cpp", "*.hpp" },
+  pattern = { "*.c", "*.h", "*.cpp", "*.hpp", "*.typ" },
   callback = function(args)
     if not autoformat_enabled then
       return
     end
-    -- Disable formatting by default if .clang-format is not found in the repository
-    if not has_repo_clang_format(args.buf) then
-      return
-    end
-    local clients = vim.lsp.get_clients({ bufnr = args.buf, name = "clangd" })
-    if #clients > 0 then
-      vim.lsp.buf.format({ bufnr = args.buf, id = clients[1].id, timeout_ms = 1000 })
+    local ft = vim.bo[args.buf].filetype
+    if ft == "c" or ft == "cpp" or ft == "objc" or ft == "objcpp" then
+      if not has_repo_clang_format(args.buf) then
+        return
+      end
+      local clients = vim.lsp.get_clients({ bufnr = args.buf, name = "clangd" })
+      if #clients > 0 then
+        vim.lsp.buf.format({ bufnr = args.buf, id = clients[1].id, timeout_ms = 1000 })
+      end
+    elseif ft == "typst" then
+      local clients = vim.lsp.get_clients({ bufnr = args.buf, name = "tinymist" })
+      if #clients > 0 then
+        vim.lsp.buf.format({ bufnr = args.buf, id = clients[1].id, timeout_ms = 1000 })
+      end
     end
   end,
 })
