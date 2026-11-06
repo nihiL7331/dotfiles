@@ -132,23 +132,26 @@ get_power_str() {
 	for f in /sys/class/power_supply/BAT*/status(N); do read -r bat_status < "$f"; break; done
 	for f in /sys/class/power_supply/BAT*/capacity(N); do read -r bat_cap < "$f"; break; done
 
-	if [[ "$bat_status" == "Discharging" ]] || (( ${bat_cap:-100} < 95 )); then
-		for f in /sys/class/power_supply/BAT*/power_now(N); do read -r raw_power < "$f"; break; done
-		local watts
-		if [[ -n "$raw_power" ]]; then
-			watts=$(printf "%4.1fW" $(( raw_power / 1000000.0 )))
-		else
-			watts=$(printf "%5s" "AC")
+	[[ -z "$bat_status" && -z "$bat_cap" ]] && return
+
+	for f in /sys/class/power_supply/BAT*/power_now(N); do read -r raw_power < "$f"; break; done
+	local watts
+	if [[ -n "$raw_power" ]]; then
+		local p_watts=$(( raw_power / 1000000.0 ))
+		if [[ "$bat_status" == "Discharging" ]] && (( p_watts > 0 )); then
+			p_watts=$(( -p_watts ))
 		fi
-		set_char_by_perc ${bat_cap:-100} "$BAT_ICONS"
-		[[ "$bat_status" == "Charging" ]] && _char="󰂄"
-        if [[ $bat_cap -lt 20 ]]; then
-            printf "%s%s %d%%%s %s | " "$(set_fg "$BAT_LOW_COL")" "$_char" "$bat_cap" "$(set_fg "")" "$watts"
-        else
-            printf "%s %s%% %s | " "$_char" "$bat_cap" "$watts"
-        fi
+		watts=$(printf "%4.1fW" $p_watts)
 	else
-		POWER_STR=""
+		watts=$(printf "%5s" "AC")
+	fi
+
+	set_char_by_perc ${bat_cap:-100} "$BAT_ICONS"
+	[[ "$bat_status" == "Charging" ]] && _char="󰂄"
+	if [[ ${bat_cap:-100} -lt 20 ]]; then
+		printf "%s%s %d%%%s %s | " "$(set_fg "$BAT_LOW_COL")" "$_char" "${bat_cap:-0}" "$(set_fg "")" "$watts"
+	else
+		printf "%s %s%% %s | " "$_char" "${bat_cap:-0}" "$watts"
 	fi
 }
 
